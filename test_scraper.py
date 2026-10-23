@@ -8,7 +8,7 @@ import tempfile
 import unittest
 from email.message import Message
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 from urllib.error import HTTPError
 
 from scraper import START_URL, PageParser, crawl, decode_html, normalize_url, save_csv
@@ -96,6 +96,21 @@ class ScraperTests(unittest.TestCase):
             self.assertEqual(visited.count(START_URL), 1)
             self.assertEqual(visited.count(START_URL + "a/"), 1)
             self.assertIn(START_URL + "missing/", state["errors"])
+
+    def test_unexpected_failure_keeps_inflight_url(self):
+        fake = Mock()
+        fake.robots.can_fetch.return_value = True
+        fake.fetch.side_effect = RuntimeError("Unexpected interruption")
+        with tempfile.TemporaryDirectory() as tmp, patch("scraper.Crawler", return_value=fake):
+            root = Path(tmp)
+            args = argparse.Namespace(delay=1, max_pages=0, fresh=False,
+                                      state=root / "state.json", output=root / "sitemap.csv",
+                                      report=root / "report.json")
+            with self.assertRaises(RuntimeError):
+                crawl(args)
+            state = json.loads(args.state.read_text())
+            self.assertEqual(state["queue"], [START_URL])
+            self.assertFalse(json.loads(args.report.read_text())["traversal_complete"])
 
 
 if __name__ == "__main__":

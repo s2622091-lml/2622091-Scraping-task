@@ -223,6 +223,9 @@ def crawl(args):
         interrupted = True
         print("Interrupted; saving progress.", flush=True)
     finally:
+        # 想定外の中断でも、処理途中のURLを次回のために残す。
+        if current and current not in seen and current not in queue:
+            queue.appendleft(current)
         save()
         report = dict(start_url=START_URL, traversal_complete=not queue,
                       page_count=len(pages), pending_count=len(queue),

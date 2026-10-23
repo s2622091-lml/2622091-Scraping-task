@@ -1,0 +1,5 @@
+__pycache__/
+.crawl-state.json
+.sample-state.json
+*.tmp
+.DS_Store

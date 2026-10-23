@@ -26,6 +26,8 @@ python3 scraper.py
 
 途中でCtrl+Cを押してもCSVと進捗を保存します。同じコマンドを再実行すると再開できます。進捗ファイルは`.crawl-state.json`です。最初からやり直す場合は`--fresh`を指定します。
 
+通信障害やサーバーの一時的なエラーが起きた場合も、進捗を保存して終了します。接続が戻ってから同じコマンドを再実行すると、失敗したURLから再開します。
+
 ```bash
 python3 scraper.py --fresh
 python3 scraper.py --max-pages 10 --output sample.csv --state .sample-state.json

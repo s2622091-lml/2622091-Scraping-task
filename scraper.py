@@ -207,9 +207,15 @@ def crawl(args):
                         scheduled.add(target)
                 print(f"[{len(pages)} pages | {len(queue)} queued] {final_url} | {parser.title}", flush=True)
             except (HTTPError, URLError, OSError, ValueError) as error:
-                if isinstance(error, HTTPError) and error.code in (429, 503):
+                intentional_skip = isinstance(error, URLError) and str(error.reason).startswith(
+                    ("External or non-HTML redirect skipped:", "Redirect disallowed by robots.txt:")
+                )
+                temporary_http = isinstance(error, HTTPError) and error.code in (429, 500, 502, 503, 504)
+                network_error = (not isinstance(error, HTTPError)
+                                 and isinstance(error, (URLError, OSError)) and not intentional_skip)
+                if temporary_http or network_error:
                     queue.appendleft(current)
-                    print(f"Server requested a pause (HTTP {error.code}); progress saved. Resume later.", flush=True)
+                    print(f"Temporary connection/server error: {error}; progress saved. Resume later.", flush=True)
                     current = None
                     break
                 errors[current] = str(error)

@@ -235,7 +235,8 @@ def crawl(args):
         save()
         report = dict(start_url=START_URL, traversal_complete=not queue,
                       page_count=len(pages), pending_count=len(queue),
-                      errors=errors, robots_excluded=excluded)
+                      errors=errors, robots_excluded=excluded,
+                      missing_titles=[url for url, title in pages.items() if not title])
         args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"Saved {len(pages)} pages to {args.output}; pending={len(queue)}, errors={len(errors)}", flush=True)
     return 130 if interrupted else (2 if queue else 0)

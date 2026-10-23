@@ -3,3 +3,4 @@ __pycache__/
 .sample-state.json
 *.tmp
 .DS_Store
+crawl.log

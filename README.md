@@ -48,14 +48,16 @@ HTMLからタイトルを取得できなかったページは、タイトルを�
 
 ## Gitでの作業
 
-最初にmainへこのREADMEをコミットし、実装は`feature/sitemap-crawler`ブランチで行います。動作を確認してからmainへマージします。提出時の公開リポジトリ名は`学籍番号-Scraping-task`です。
+実装は`feature/sitemap-crawler`ブランチで行い、動作を確認してからmainへマージ済みです。提出時の公開リポジトリ名は`2622091-Scraping-task`、GitHubユーザー名は`s2622091-lml`です。
 
 GitHubに空のPublicリポジトリを作った後、リポジトリのURLを指定してアップロードします。
 
 ```bash
-git remote add origin https://github.com/自分のユーザー名/学籍番号-Scraping-task.git
+git remote add origin https://github.com/s2622091-lml/2622091-Scraping-task.git
 git push -u origin main
 git push -u origin feature/sitemap-crawler
 ```
 
-Google Classroomには、このGitHubリポジトリのURLを提出します。
+公開リポジトリを作成し、アップロードが完了した後、Google Classroomには次のURLを提出します。
+
+https://github.com/s2622091-lml/2622091-Scraping-task
